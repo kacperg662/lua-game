@@ -10,10 +10,7 @@ function love.update(dt)
     end
 
     if currentState.finished then
-        local nextState = determineState(currentState)
-        if nextState then
-            switchState(nextState)
-        end
+        determineState(currentState)
     end
 end
 
@@ -41,17 +38,27 @@ function switchState(newState)
 end
 
 function determineState(state)
-    if state.name == "intro" then
-        return require("states.menu")
+    -- intro state
+    if state.name == "intro" then 
+        switchState(require("states.menu"))
+    
+    -- menu state 
     elseif state.name == "menu" then
-        if state.choice == "game" then
-            return require("states.game")
+        if state.choice == "loreIntro" then
+            switchState(require("states.loreIntro"))
         elseif state.choice == "options" then
-            return require("states.options")
+            switchState(require("states.options"))
         end
+    
+    -- lore intro state
+    elseif state.name == "loreIntro" then
+        switchState(require("states.game"))
+    
+    -- options state
     elseif state.name == "options" then
-        if state.choice == "back" then
-            return require("states.menu")
+        if state.choice == "menu" then
+            switchState(require("states.menu"))
         end
     end
+
 end
